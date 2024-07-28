@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 const Calculator = () => {
-  const [result, setResult] = useState<number>(0);
   const [dispResult, setDispResult] = useState<string | null>(null);
 
   const onClickInputNumber = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -18,26 +17,24 @@ const Calculator = () => {
   };
 
   const onClickAdd = () => {
-    setResult((prev) => {
-      if (dispResult?.includes("+")) {
-        const [first, second] = dispResult.split("+").map(Number);
-        return first + second;
-      }
-      return prev + Number(dispResult);
-    });
-
     setDispResult((prev) => {
       if (prev === null) {
         return null;
-      }
-      if (prev.includes("+")) {
-        return result + "+";
       }
       return prev + "+";
     });
   };
 
-  const onClickEqual = () => {};
+  // q: 計算結果を出す関数を作成してください
+  const onClickEqual = () => {
+    setDispResult(() => {
+      if (dispResult === null) {
+        return null;
+      }
+      const numArr = dispResult.split("+").map(Number);
+      return numArr.reduce((acc, cur) => acc + cur, 0).toString();
+    });
+  };
 
   return (
     <div>
@@ -82,7 +79,7 @@ const Calculator = () => {
         </button>
         <button>.</button>
         <button>C</button>
-        <button>=</button>
+        <button onClick={onClickEqual}>=</button>
       </div>
     </div>
   );
